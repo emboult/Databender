@@ -1,0 +1,56 @@
+{
+    "sections": [
+        {
+            "title": "Introduction to Databending",
+            "content": "Databending is the practice of manipulating digital files (usually images, audio, or video) in ways not intended by their specifications to create artistic 'glitch' effects. By directly editing raw bytes, inserting patterns, or corrupting structures, you transform predictable data into unexpected visual artifacts.\n\nThe art lies in understanding just enough about file formats to predict (or surprise yourself with) how changes to bytes manifest as visual glitches. Start with small changes, observe the results, and gradually explore more aggressive transformations.\n\nThis tool is designed to make databending accessible and fun, with features to help you experiment, preview, and understand the effects of your edits in real-time. Currently supports only image files, but audio and video support may come in future updates!"
+        },
+        {
+            "title": "Supported File Formats",
+            "content": "Automatically detected when opening:\n\n• JPEG (.jpg, .jpeg): Common photo format, lossy compression\n• PNG (.png): Lossless, supports transparency\n• BMP (.bmp): Uncompressed, large file size\n• GIF (.gif): Supports animation, limited colors\n• TIFF (.tiff, .tif): Flexible format, often used in print\n• WEBP (.webp): Modern format, good compression\n• PPM (.ppm): Simple uncompressed format\n• TGA (.tga): Old format, supports transparency\n\nUnknown formats are treated as raw binary data. Though visualization is not supported, yet!"
+        },
+        {
+            "title": "Anatomy of Digital Image Formats",
+            "content": "Most image files consist of three main structural components:\n\n• Header (Magic Bytes): The first few bytes that identify the format. Examples:\n  - PNG: '‰PNG' (0x89 0x50 0x4E 0x47)\n  - JPEG: 'ÿØÿ' (0xFF 0xD8 0xFF)\n  - GIF: 'GIF8' (0x47 0x49 0x46 0x38)\n  - BMP: 'BM' (0x42 0x4D)\n  - TIFF: 'II*\\0' (0x49 0x49 0x2A 0x00) or 'MM\\0*'\n  - WEBP: 'RIFF....WEBP' (starts with RIFF, contains WEBP at byte 8)\n\n• Metadata: Information about dimensions, color depth, compression, palettes, etc. Corruption here can drastically alter interpretation.\n\n• Pixel Data: The actual image bytes. Glitching here directly affects colors and shapes while usually keeping the file readable."
+        },
+        {
+            "title": "Editors",
+            "content": "Hex view: Shows raw bytes in three columns - offsets (left), hexadecimal values (middle), and Latin-1 representation (right). You can edit bytes directly by typing two hex digits (0-9, A-F). The cursor automatically advances after each byte. Backspace clears partial entries.\n\nLatin-1 view: Shows the file interpreted as Latin-1 text. Each byte becomes one character, with unprintable bytes shown as dots ('.'). Edits here will modify the underlying bytes. Good for finding text patterns or creating text-based glitches."
+        },
+        {
+            "title": "Context Menu",
+            "content": "Right-click anywhere in Hex or Latin-1 view to open the context menu with quick actions:\n\n• Randomize: Randomizes all bytes in the current selection.\n• Invert Bits: Flips all bits (0→1, 1→0) in the selection (bitwise NOT).\n• Set to Zero: Sets all selected bytes to 0x00.\n\n• Copy Hex: Copies the selected bytes as a hex string (e.g., 'A1B2C3').\n• Paste Hex: Pastes hex from clipboard at cursor/selection start.\n\n• Clear Highlights: Removes all green edit highlights from the current file.\n\nNote: If no selection exists, these tools will have no effect (except Copy/Paste). Make a selection first by clicking and dragging or double-clicking a byte."
+        },  
+        {
+            "title": "External Viewer",
+            "content": "The 'View' button opens your current file in your system's default image viewer. This is essential because:\n\n• The built-in preview uses Pillow (Python imaging library) which has limitations - it cannot properly display animated GIFs and may show 'corrupted' previews for perfectly valid files.\n• Some glitches only become visible in full viewers, not thumbnails.\n• PNG files with certain corruption may throw false errors in preview but open fine externally.\n\nAlways verify your glitches in the external viewer before saving."
+        },
+        {
+            "title": "Search and Goto",
+            "content": "Press Ctrl+F to open the search bar. Three types of input are supported:\n\n• Hex offset: Type '0x1A3F' to jump to hexadecimal offset 0x1A3F. The byte will be highlighted in light blue.\n\n• Decimal offset: Type '@12345' to jump to the 12345th byte in the file. The byte will be highlighted in light blue.\n\n• Hex pattern: Type 'FF' to search for all bytes with value FF. Multi-byte patterns like 'A1B2C3' also work. All matches are highlighted in yellow, with the current match in orange.\n\nUse Next/Prev buttons to navigate through matches. The counter (e.g., '3/12') shows your position and total matches found. Click Close or press Ctrl+F again to hide the search bar and clear highlights."
+        },
+        {
+            "title": "Visual Highlights",
+            "content": "Different colors indicate different states:\n\n• Green shades: Edited bytes (darker green = most recent edit, lighter green = older edits)\n• Blue: Current selection (mouse drag or double-click to select a byte)\n• Yellow: Search matches\n• Orange: Current active search match\n• Light blue: Goto position (hex or decimal offset jump)\n\nEdit highlights persist until you explicitly clear them (Right-click → Clear Highlights) or close/reload the file."
+        },
+        {
+            "title": "Tools - Overview",
+            "content": "Tools operate on the entire file by default. If you make a selection first, the tool will only affect that specific region. Most tools have a live preview checkbox - enable it to see effects in real-time before applying. For large files (>50MB), disable preview for better performance.\n\nEach tool has its own dialog with parameters and a description. Click OK to apply permanently."
+        },
+        {
+            "title": "Format Conversion",
+            "content": "The Convert dropdown lets you change the file format by swapping headers and re-encoding pixel data internally. This works by:\n\n1. Decoding the current image using its format's decoder\n2. Re-encoding the pixel data with the target format's encoder\n3. Prepending the new format's magic bytes/header\n\nFormat headers (Magic Bytes):\n• JPEG: 0xFF 0xD8 0xFF\n• PNG: 0x89 0x50 0x4E 0x47 0x0D 0x0A 0x1A 0x0A\n• BMP: 0x42 0x4D\n• GIF: 0x47 0x49 0x46 0x38 (followed by '7a' or '9a')\n• TIFF: 0x49 0x49 0x2A 0x00 (little-endian) or 0x4D 0x4D 0x00 0x2A (big-endian)\n• WEBP: 0x52 0x49 0x46 0x46 (RIFF) with 'WEBP' at bytes 8-11\n• PPM: Plain text magic (P1-P6)\n• TGA: Variable header, typically starts with image ID length and colormap type\n\nImportant: Converting to JPEG removes transparency. Converting between formats completely changes byte structure - previous edit highlights will shift positions."
+        },
+        {
+            "title": "Keyboard Shortcuts",
+            "content": "Global shortcuts (work everywhere):\n• Ctrl+O: Open file\n• Ctrl+S: Save file\n• Ctrl+R: Reload original file\n• Ctrl+Z: Undo\n• Ctrl+Y / Ctrl+Shift+Z: Redo\n• Ctrl+F: Show/hide search bar\n• Ctrl+C: Copy selected bytes as hex\n• Ctrl+V: Paste hex from clipboard\n• Right-click: Open context menu\n\nIn Hex view only: Type hex digits (0-9, A-F) to edit bytes directly."
+        },
+        {
+            "title": "Errors",
+            "content": "Common error messages and what they mean:\n\n• 'File too large': Maximum file size is 200MB to prevent memory issues.\n\n• 'Conversion error': The image could not be re-encoded to the target format. Usually happens with heavily corrupted files or unsupported color modes.\n\n• 'Preview not available / Unidentified image format': Pillow cannot interpret the current bytes as a valid image. The file may still open in external viewer.\n\n• 'Clipboard error': System clipboard inaccessible or contains invalid hex data.\n\n• 'Render error': The hex/Latin view encountered unexpected data. Try refreshing or reloading.\n\n• 'Nothing to undo/redo': No history entries available in current direction."
+        },
+        {
+            "title": "Additional Resources",
+            "content": "For more information about databending and glitch art:\n\n• Wikipedia: https://en.wikipedia.org/wiki/Databending\n• Glitch art community: Search for 'glitch art tutorials' online\n• Image format specifications: Check W3C or library documentation for detailed format structures"
+        }
+    ]
+}

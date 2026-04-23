@@ -1,0 +1,9 @@
+{
+    "whitespace_inject": "Inserts random whitespace characters (spaces, tabs, newlines) into the file. This can affect how the viewer interprets the data, creating subtle glitch artifacts without completely destroying the image structure. Perfect for delicate corruption effects.",
+    "repeat_chunks": "Copies random chunks of the file and pastes them elsewhere. Each chunk has a fixed size that you define. Creates 'duplication' effects - like repeating patterns of pixels or structures, similar to copying and pasting sections of a corrupted tape.",
+    "pattern_inject": "Inserts a specific hex pattern (e.g., DE AD BE EF) at random positions. If you have a selection, the pattern is injected only within that range. Useful for 'poisoning' specific areas of the file with repeating data patterns.",
+    "shuffle_blocks": "Splits the image (or selected region) into fixed-size blocks and randomly shuffles them. When no selection exists, it protects the first 512 bytes (header) and shuffles only the remaining data. Creates a 'puzzle' or 'static interference' effect.",
+    "hex_pattern_replace": "Searches for a hex pattern (supports '..' wildcard for unknown bytes) and replaces it with another pattern. Without a selection, it only works on the file body (after the first 64 bytes). Ideal for targeted color or structure modifications.",
+    "reverse_blocks": "Reverses the byte order within each block. For example, a 4-byte block '01 02 03 04' becomes '04 03 02 01'. Without a selection, it protects the first 512 bytes. Creates a 'mirror' or 'inversion' effect within each block of the image.",
+    "general": "Tools operate on the entire file by default. If you create a selection, the tool will only affect that specific region."
+}
