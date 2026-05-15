@@ -1,4 +1,5 @@
 <h1>Databender:</h1> <br>
+<img src="all.png">
 
 <h2>Overview:</h2>
 Databender is my dissertation project for my university course, in the department of informatics. Edit image files at byte level, apply automated glitch tools, preview results in real time.<br>
